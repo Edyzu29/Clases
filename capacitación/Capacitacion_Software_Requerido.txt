@@ -1,0 +1,34 @@
+
+
+SOFTWARE REQUERIDO PARA LA CAPACITACIÓN CON MICROCONTROLADORES PIC
+
+-MPLAB IDE
+Disponible en: https://www.microchip.com/mplab/mplab-x-ide
+
+-XC8 Compiler
+Disponible en: https://www.microchip.com/mplab/compilers
+
+-Software PICkit3
+Disponible en: ww1.microchip.com/downloads/en/DeviceDoc/PICkit3%20Programmer%20Application%20v3.10.zip
+
+
+SOFTWARE REQUERIDO PARA LA CAPACITACIÓN CON MICROCONTROLADORES AVR
+
+-Atmel Studio (Incluye compilador AVR-GCC)
+Disponible en: https://www.microchip.com/mplab/avr-support/atmel-studio-7
+
+-AVRdudess (AVRdude + Interfaz Gráfica)
+Disponible en: https://blog.zakkemble.net/avrdudess-a-gui-for-avrdude/
+
+-USBASP con instalador Zadig (usar el firmware usbasp.2011-05-28.tar.gz)
+Disponible en: https://www.fischl.de/usbasp/
+Guia de instalación del USBASP con Zadig: https://electronics.stackexchange.com/questions/416714/avrdude-does-not-recognize-usbasp-device/417509#417509
+
+Software para terminal Serial:
+-Realterm
+-Arduino IDE
+
+SOFTWARE OPCIONAL (No son indispensables, pero se pueden utilizar para elaborar gráficos)
+
+- Matlab
+- LabVIEW
