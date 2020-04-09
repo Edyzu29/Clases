@@ -31,8 +31,7 @@ extern "C" {
 // Use project enums instead of #define for ON and OFF.
     
  #define _XTAL_FREQ  16000000UL   
-    
-/* Constantes y macros */
+
  #define     INPUT_TRIS(A, B)        B   |=    (1<<A)   
  #define     OUTPUT_TRIS(A, B)     B &= ~(1<<A)
  /*En la variable A, debes poner que pin quieres modificar
@@ -44,8 +43,10 @@ extern "C" {
  *              INTPUT_TRIS(3,TRISB)
  */
     
+    
 #ifdef	__cplusplus
 }
 #endif
 
 #endif	/* SYSTEM_CONFIG_H */
+

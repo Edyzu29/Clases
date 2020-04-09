@@ -14,18 +14,20 @@ int main(void){
     Config_ADC();
     Config_Usart();
     OUTPUT_TRIS(TX,PORTC);
-    OUTPUT_TRIS(0,PORTA);
+    INPUT_TRIS(0,PORTA);
 
 /* Repetir indefinidamente */
 	while(1){
-            for(indice=0;indice<21;indice++){
+             __delay_ms(5000);
+            for(indice=0;indice<20;indice++){
                 valor_potenciometro[indice]=Lectura_ADC(0);
-                __delay_us(125);
+                __delay_ms(500);
             }		
-            for(indice=0;indice<21;indice++){
+            for(indice=0;indice<20;indice++){
                 UART0_Tx_Integer(valor_potenciometro[indice]);
-                UART0_Tx_String("\r\n");
+                UART0_Tx_String(", ");
             }
+             UART0_Tx_String("\r\n");
 	}
 	return 0;
 }

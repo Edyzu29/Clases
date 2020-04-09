@@ -31,6 +31,19 @@ extern "C" {
 // Use project enums instead of #define for ON and OFF.
     
  #define _XTAL_FREQ  16000000UL   
+
+    /* Constantes y macros */
+#define     INPUT_TRIS(A, B)        B   |=    (1<<A)   
+#define     OUTPUT_TRIS(A, B)     B &= ~(1<<A)
+/*En la variable A, debes poner que pin quieres modificar
+ * En la varible B, debes poner el puerto al que usaras
+ * Ej: 
+ *      - Quiero usar el pin 8 del puerto D para prender un Led
+ *              OUTPUT_TRIS(7,TRISD)
+ *      - Quiero usar el pin 4 del puerto B para leer un bit
+ *              INTPUT_TRIS(3,TRISB)
+ */
+/*Varibles Globales*/
     
 #ifdef	__cplusplus
 }
