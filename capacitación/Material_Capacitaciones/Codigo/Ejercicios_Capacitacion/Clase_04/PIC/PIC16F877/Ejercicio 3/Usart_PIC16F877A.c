@@ -4,9 +4,15 @@
 #include <stdint.h>
 #include "Usart_PIC16F887A.h"
 
-/*Funciones*/
+/****************************************************************************
+ * Nombre de la función: Config_Usart
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
 void Config_Usart(void){
-                                            /*Configuracion de comunicaci?n */
+                                            /*Configuracion de comunicación */
         TXSTAbits.SYNC=0;
         /*1 = Synchronous mode
           0 = Asynchronous mode */
@@ -30,7 +36,7 @@ void Config_Usart(void){
         /*1 = Transmit enabled
            0 = Transmit disabled*/
         
-                                           /*Configuracion de la recepci?n*/
+                                           /*Configuracion de la recepción*/
         RCSTAbits.RX9=0;
         /*1 = Selects 9-bit transmission
            0 = Selects 8-bit transmission*/
@@ -39,11 +45,24 @@ void Config_Usart(void){
            0 = Disables continuous receive*/
 }
 
+/****************************************************************************
+ * Nombre de la función: Tx_char
+ * retorna : nada
+ * ingresa: un dato a enviar tipo "Char"
+ * Descripción : Envia un caracter
+ *****************************************************************************/
 void Tx_char(char data){
     while(TXSTAbits.TRMT == 0);
     TXREG = data;                               
-}               
+} 
 
+/****************************************************************************
+ * Nombre de la función: UART0_Tx_String
+ * retorna : nada
+ * ingresa: Una cadena de texto a enviar tipo "Char"
+ * Descripción : La cadena de texto se secciona para enviar cada elemento 
+		como un caracter
+ *****************************************************************************/             
 void UART0_Tx_String(char *str){
 
 	/* Mientras no se alcance el final de la cadena */
@@ -56,6 +75,14 @@ void UART0_Tx_String(char *str){
 	}
 }
 
+
+/****************************************************************************
+ * Nombre de la función: UART0_Tx_Integer
+ * retorna : nada
+ * ingresa: Un dato a enviar tipo "Int32"
+ * Descripción : El valor entero ingresado se secciona para enviar cada elemento 
+		como un caracter
+ *****************************************************************************/ 
 void UART0_Tx_Integer(int32_t num){
 
 	char signo_y_digitos[12];
@@ -63,7 +90,7 @@ void UART0_Tx_Integer(int32_t num){
 	int32_t digito;
 	int8_t indice = 11;
 
-	/* Determinar el signo del n?mero */
+	/* Determinar el signo del número */
 	if(num < 0){
 		signo = 1;
 		num = -num;
@@ -72,7 +99,7 @@ void UART0_Tx_Integer(int32_t num){
 	/* Indicar el fin de la cadena de caracteres */
 	signo_y_digitos[indice--] = '\0';
 
-	/* Extraer los d?gitos uno a uno, empezando por las unidades */
+	/* Extraer los dígitos uno a uno, empezando por las unidades */
 	do{
 		digito = (num % 10) + '0';
 		signo_y_digitos[indice--] = (char)digito;
@@ -86,10 +113,16 @@ void UART0_Tx_Integer(int32_t num){
 		indice++;
 	}
     __delay_ms(100);
-	/* Transmitir el n?mero */
+	/* Transmitir el número */
 	UART0_Tx_String(&signo_y_digitos[indice]);
 }
 
+/****************************************************************************
+ * Nombre de la función: Rx
+ * retorna : Un dato recibido de tipo "Char"
+ * ingresa: nada
+ * Descripción : Recibe un caracter por el puerto USART
+ *****************************************************************************/ 
 char Rx(void){
     return RCREG; 
-}                    
+} 

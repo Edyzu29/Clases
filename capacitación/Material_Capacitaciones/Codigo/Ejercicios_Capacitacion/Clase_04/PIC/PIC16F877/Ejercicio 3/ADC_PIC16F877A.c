@@ -3,6 +3,12 @@
 #include <stdint.h>
 #include "ADC_PIC16F877A.h"
 
+/****************************************************************************
+ * Nombre de la función: Config_ADC
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en el modulo de ADC
+ *****************************************************************************/ 
 void Config_ADC(void){
     ADCON1bits.ADCS2=0b1; ADCON0bits.ADCS=0b00;
     /*ADCS2    ADCS1-0     Clock Conversion
@@ -44,6 +50,13 @@ void Config_ADC(void){
      */
 }
 
+/****************************************************************************
+ * Nombre de la función: Lectura_ADC 
+ * retorna : Un dato de tipo "Int16"
+ * ingresa: Un dato de tipo "Int8"
+ * Descripción : El valor ingresado selecciona el canal por el cual se leerá 
+		el voltaje para luego ser transformado a digital por el módulo 
+ *****************************************************************************/ 
 uint16_t Lectura_ADC (uint8_t canal){
     ADCON0bits.CHS=canal;
     /*  Selector de canales de lecturas

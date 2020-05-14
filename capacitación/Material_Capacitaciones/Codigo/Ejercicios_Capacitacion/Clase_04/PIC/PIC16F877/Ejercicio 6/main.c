@@ -23,8 +23,6 @@ int main(void) {
     DISPLAY_TRIS = 0x00;
     DISPLAY_PORT= 0x00;
     Config_Usart();
-    Inicializar_Interrupciones();
-    Activar_Uart_Tx_Rx_Interrupciones();
 
     /*Mandar informacion al usuario sobre que mensaje debe
      mandar para conmutar un segmento o todo el Display*/
