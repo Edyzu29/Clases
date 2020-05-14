@@ -2,6 +2,12 @@
 #include <stdint.h>
 #include "Timer1_Conf.h"
 
+/****************************************************************************
+ * Nombre de la función: Timer1_Inicializar
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros del TMR1
+ *****************************************************************************/
 void Timer1_Inicializar(void) {
     INTCONbits.GIE = 1; /*Activamos las interrupciones globales*/
     INTCONbits.PEIE = 1; /*Activamos las interrupciones procedentes de los perifericos*/

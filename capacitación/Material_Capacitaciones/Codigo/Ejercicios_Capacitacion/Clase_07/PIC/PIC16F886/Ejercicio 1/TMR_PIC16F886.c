@@ -3,7 +3,7 @@
 #include "Usart_PIC16F886.h"
 
 /****************************************************************************
- * Nombre de la función: Config_TMR
+ * Nombre de la función: Config_TMR0
  * retorna : nada
  * ingresa: nada
  * Descripción : Configura los registros del TMR0

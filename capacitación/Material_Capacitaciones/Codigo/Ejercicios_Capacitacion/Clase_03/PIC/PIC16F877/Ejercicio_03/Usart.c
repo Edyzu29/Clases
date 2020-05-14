@@ -3,8 +3,15 @@
 #include <stdint.h>
 #include "Usart.h"
 
-#define _XTAL_FREQ 4000000
+#define _XTAL_FREQ 16000000
 
+/****************************************************************************
+ * Nombre de la función: Confi_Blue
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
 void Confi_Blue(void) {
     Tris_Rx = 1; //Configurar el pin Rx como entrada
     Tris_Tx = 0; //Configurar el pin Tx como salida
@@ -27,23 +34,34 @@ void Confi_Blue(void) {
     RCSTAbits.CREN = 1; //Activamos recepción
 }
 
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+/****************************************************************************
+ * Nombre de la función: Tx_str
+ * retorna : nada
+ * ingresa: un dato a enviar tipo "Char"
+ * Descripción : Envia un caracter
+ *****************************************************************************/
 void Tx_str(char data) {
     while (TXSTAbits.TRMT == 0);
     TXREG = data;
 } //Esta función envia datos cadena
 
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+/****************************************************************************
+ * Nombre de la función: Rx
+ * retorna : Un dato recibido de tipo "Char"
+ * ingresa: nada
+ * Descripción : Recibe un caracter por el puerto USART
+ *****************************************************************************/ 
 char Rx(void) {
     return RCREG;
 } //Esta función recibe datos
 
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
-void Tx_num(uint8_t dita) {
-    TXREG = dita;
-} //Esta función envia datos cadena
-
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+/****************************************************************************
+ * Nombre de la función: UART0_Tx_String
+ * retorna : nada
+ * ingresa: Una cadena de texto a enviar tipo "Char"
+ * Descripción : La cadena de texto se secciona para enviar cada elemento 
+		como un caracter
+ *****************************************************************************/             
 void UART0_Tx_String(char *str) {
 
     /* Mientras no se alcance el final de la cadena */
@@ -56,6 +74,13 @@ void UART0_Tx_String(char *str) {
     }
 }
 
+/****************************************************************************
+ * Nombre de la función: UART0_Tx_Integer
+ * retorna : nada
+ * ingresa: Un dato a enviar tipo "Int32"
+ * Descripción : El valor entero ingresado se secciona para enviar cada elemento 
+		como un caracter
+ *****************************************************************************/ 
 void UART0_Tx_Integer(int32_t num) {
 
     char signo_y_digitos[12];

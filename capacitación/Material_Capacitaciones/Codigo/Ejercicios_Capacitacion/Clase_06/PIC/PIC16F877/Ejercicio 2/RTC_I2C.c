@@ -3,6 +3,12 @@
 #include "I2C.h"
 #include "Usart.h"
 
+/****************************************************************************
+ * Nombre de la función: Escribir_Hora_Rtc
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Envia la hora a una memoria EEPROM
+ *****************************************************************************/
 void Escribir_Hora_Rtc(void) {
     I2C_Inicio();
     I2C_Escribir(0b11010000); /*Elegimos la dirección del RTC (slave) que viene dato por el fabricante*/
@@ -23,6 +29,12 @@ void Escribir_Hora_Rtc(void) {
     I2C_Detener(); /*Damos el comando de parada para detener la transferencia de datos por I2C*/
 }
 
+/****************************************************************************
+ * Nombre de la función: Leer_Hora_Rtc
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Recibir informacion de la memoria
+ *****************************************************************************/
 void Leer_Hora_Rtc(void) {
     I2C_Inicio(); /*Damos el comando de START para iniciar la transferencia de datos por I2C*/
     I2C_Escribir(0b11010000); /*Escojemos la dirección del RTC slave*/
@@ -41,6 +53,13 @@ void Leer_Hora_Rtc(void) {
     I2C_Detener(); /*Damos por terminada la recepción de datos del RTC*/
 }
 
+/****************************************************************************
+ * Nombre de la función: Config_Usart
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
 void Poner_Fecha_Rtc(void) {
     I2C_Inicio(); /*Enviamos el comando de START del RTC para iniciar la transmisión de los datos*/
     I2C_Escribir(0b11010000); /*Enviamos la dirección del RTC para iniciar la comunicación*/
@@ -51,6 +70,13 @@ void Poner_Fecha_Rtc(void) {
     I2C_Detener(); /*Detenemos la transmisión de datos por el bus I2C*/
 }
 
+/****************************************************************************
+ * Nombre de la función: Config_Usart
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
 void Leer_Fecha_Rtc(void) {
     I2C_Inicio(); /*Damos el comando de START para iniciar la transferencia de datos por I2C*/
     I2C_Escribir(0b11010000); /*Escojemos la dirección del RTC slave*/
@@ -69,6 +95,13 @@ void Leer_Fecha_Rtc(void) {
     I2C_Detener(); /*Damos por terminada la recepción de datos del RTC*/
 }
 
+/****************************************************************************
+ * Nombre de la función: Config_Usart
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
 void Hora_Por_Terminal_Serial(void) {
     Tx_str((horas >> 4) + DATO_CONVERSOR_A_ASCII); /*Mostramos por el ternimal serial la Hora y añadimos el conversor a ASCII*/
     /*
@@ -101,6 +134,13 @@ void Hora_Por_Terminal_Serial(void) {
     UART0_Tx_String(" \r\n"); /*Mostramos un fin de linea y saltamos un espacio*/
 }
 
+/****************************************************************************
+ * Nombre de la función: Config_Usart
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
 void Fecha_Por_Terminal_Serial(void) {
     Tx_str((years >> 4) + DATO_CONVERSOR_A_ASCII); /*Mostramos por el ternimal serial la Hora y añadimos el conversor a ASCII*/
     /*
@@ -133,6 +173,13 @@ void Fecha_Por_Terminal_Serial(void) {
     UART0_Tx_String(" \r\n"); /*Mostramos un fin de linea y saltamos un espacio*/
 }
 
+/****************************************************************************
+ * Nombre de la función: Config_Usart
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
 void Transformar_Hora_Para_Envio(void) {
     for (variable_de_conteo = 0; variable_de_conteo < 7; variable_de_conteo++) { /*Creamos un conteo para garantizar que los bits más significativos sean 0*/
         Hora_Del_Usuario[variable_de_conteo]  &= 0x0F; /*Multiplicamos por 0x0F para garantizar lo anterior*/
@@ -144,6 +191,13 @@ void Transformar_Hora_Para_Envio(void) {
 
 }
 
+/****************************************************************************
+ * Nombre de la función: Config_Usart
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
 void Transformar_Fecha_Para_Envio(void) {
     for (variable_de_conteo = 0; variable_de_conteo < 7; variable_de_conteo++) {/*Creamos un conteo para garantizar que los bits más significativos sean 0*/
         Fecha_Del_Usuario[variable_de_conteo] &= 0x0F; /*Multiplicamos por 0x0F para garantizar lo anterior*/

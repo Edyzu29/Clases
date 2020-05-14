@@ -1,10 +1,14 @@
-
-
-
 #include <xc.h>
 #include <pic16f877a.h>
 #include "I2C.h"
 
+/****************************************************************************
+ * Nombre de la función: I2C_Inicializar
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		 I2C
+ *****************************************************************************/
 void I2C_Inicializar() {
 
     TRIS_SCL = 1;
@@ -33,25 +37,48 @@ void I2C_Inicializar() {
     SSPADD = VALOR_VELOCIDAD_DE_TRANSMISION;
 }
 
-
+/****************************************************************************
+ * Nombre de la función: I2C_Inicio
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Inicia el modulo I2C
+ *****************************************************************************/
 void I2C_Inicio(void) {
 
     SSPCON2bits.SEN = 1; /*Inicia la comunicación i2c */
     while (SSPCON2bits.SEN == 1); /*Bucle de inicio de la transmisión de datos*/
 }
 
+/****************************************************************************
+ * Nombre de la función: I2C_Reinicio
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Reiniciar la comunicación
+ *****************************************************************************/
 void I2C_Reinicio(void) {
 
     SSPCON2bits.RSEN = 1; /* Reinicia la comunicación i2c */
     while (SSPCON2bits.RSEN == 1); /*Bucle de reinicio de la transmisión*/
 }
 
+/****************************************************************************
+ * Nombre de la función: I2C_Detener
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Detener la comunicación
+ *****************************************************************************/
 void I2C_Detener(void) {
 
     SSPCON2bits.PEN = 1; /*Damos la condición de stop de la comunicación serial*/
     while (SSPCON2bits.PEN == 1); /*Bucle para confirmar si ya se cumplió la comdición de parada*/
 }
 
+/****************************************************************************
+ * Nombre de la función: I2C_Leer
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Leer la informarmación recibida
+ *****************************************************************************/
 char I2C_Leer(void) {
 
     PIR1bits.SSPIF = 0; /*Se limpia la interrupcion del puerto serial SSP*/
@@ -60,6 +87,12 @@ char I2C_Leer(void) {
     return SSPBUF; /*Devuelve el valor leído*/
 }
 
+/****************************************************************************
+ * Nombre de la función: I2C_ack
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Reliza la comprobacion de la recepcion correcta del dato
+ *****************************************************************************/
 void I2C_ack(void) {
     PIR1bits.SSPIF = 0; /*Se limpia la interrupcion del puerto serial SSP*/
     SSPCON2bits.ACKDT = 0; /*Limpiamos el bit de reconocimiento de transmición de datos*/
@@ -67,6 +100,12 @@ void I2C_ack(void) {
     while (PIR1bits.SSPIF == 0); /*Esperamos a que se termine la transmisión que al ocurrir activa la bandera de interrupción*/
 }
 
+/****************************************************************************
+ * Nombre de la función: I2C_nack
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Reliza la comprobacion de la recepcion incorrecta del dato
+ *****************************************************************************/
 void I2C_nack(void) {
     PIR1bits.SSPIF = 0; /*Se limpia la interrupcion del puerto serial SSP*/
     SSPCON2bits.ACKDT = 1; /*Ponemosel bit de reconocimiento de transmición de datos eso es para decir que estamos en el N-ACK para terminar el proceso de transmisión*/
@@ -74,6 +113,12 @@ void I2C_nack(void) {
     while (PIR1bits.SSPIF == 0); /*Esperamos a que se termine la transmisión que al ocurrir activa la bandera  de interrupción*/
 }
 
+/****************************************************************************
+ * Nombre de la función: I2C_Escribir
+ * retorna : nada
+ * ingresa: un dato tipo "Char"
+ * Descripción : Realiza el envio de la informacion ingresada a la funcion
+ *****************************************************************************/
 char I2C_Escribir(char I2C_data) {
     PIR1bits.SSPIF = 0;
     SSPBUF = I2C_data; //Envia data por I2C

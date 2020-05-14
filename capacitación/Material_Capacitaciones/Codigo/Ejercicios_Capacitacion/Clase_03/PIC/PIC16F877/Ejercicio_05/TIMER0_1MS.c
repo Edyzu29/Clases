@@ -1,6 +1,12 @@
 #include <xc.h>
 #include "TIMER0_1MS.h"
 
+/****************************************************************************
+ * Nombre de la función: Timer0_Inicializar
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros del TMR0
+ *****************************************************************************/
 void Timer0_Inicializar(void) {
 
     /* Timer0 en Modo Temporizador*/

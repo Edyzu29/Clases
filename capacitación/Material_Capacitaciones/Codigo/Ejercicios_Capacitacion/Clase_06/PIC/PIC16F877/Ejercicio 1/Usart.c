@@ -3,84 +3,114 @@
 #include <stdint.h>
 #include "Usart.h"
 
-#define _XTAL_FREQ 20000000UL
+#define _XTAL_FREQ 16000000
 
-void Confi_Blue(int SPBRG_DATO){
-    Tris_Rx=1;                                 //Configurar el pin Rx como entrada
-    Tris_Tx=0;                                 //Configurar el pin Tx como salida
-    SPBRG=SPBRG_DATO;                                  //Baudios
+/****************************************************************************
+ * Nombre de la función: Confi_Blue
+ * retorna : nada
+ * ingresa: nada
+ * Descripción : Configura los registros que intervienen en la comunicacion
+		Usart
+ *****************************************************************************/
+void Confi_Blue(void) {
+    Tris_Rx = 1; //Configurar el pin Rx como entrada
+    Tris_Tx = 0; //Configurar el pin Tx como salida
+    SPBRG = 25; //Baudios
     //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    RCSTAbits.SPEN = 1;                        //Habilitar Tx y Rx
-    TXSTAbits.SYNC = 0;                        //Asincrono
-    TXSTAbits.BRGH = 0;                        //Low Speed
+    RCSTAbits.SPEN = 1; //Habilitar Tx y Rx
+    TXSTAbits.SYNC = 0; //Asincrono
+    //    BAUDCONbits.BRG16=0;                       //8 bits de Baudiage
+    TXSTAbits.BRGH = 1; //High Speed
     /*64 (8bits) ---> 000
      *8  (8bits) ---> 001
      *8  (16bits)---> 010
      *4  (16bits)---> 011*/
     //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        //Transmisión
-        TXSTAbits.TX9 = 0;                     //8 bits
-        TXSTAbits.TXEN = 1;                    //Activamos transmisión
-        //Recepción
-        RCSTAbits.RC9 = 0;                     //8 bits
-        RCSTAbits.CREN = 1;                    //Activamos recepción
-}
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
-void Tx_str(char data){
-    while(TXSTAbits.TRMT == 0);
-    TXREG = data;                               
-}               //Esta función envia datos cadena
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
-char Rx(void){
-    return RCREG; 
-}                    //Esta función recibe datos
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
-void Tx_num(uint8_t dita){
-    TXREG = dita;                               
-}               //Esta función envia datos cadena
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
-void UART0_Tx_String(char *str){
-
-	/* Mientras no se alcance el final de la cadena */
-	while(*str != '\0'){
-		/* Transmitir el caracter correspondiente */
-		Tx_str(*str);
-		/* Incrementar el valor del puntero (apuntar al siguiente caracter
-		en el arreglo) */
-		str++;
-	}
+    //Transmisión
+    TXSTAbits.TX9 = 0; //8 bits
+    TXSTAbits.TXEN = 1; //Activamos transmisión
+    //Recepción
+    RCSTAbits.RC9 = 0; //8 bits
+    RCSTAbits.CREN = 1; //Activamos recepción
 }
 
-void UART0_Tx_Integer(int32_t num){
+/****************************************************************************
+ * Nombre de la función: Tx_str
+ * retorna : nada
+ * ingresa: un dato a enviar tipo "Char"
+ * Descripción : Envia un caracter
+ *****************************************************************************/
+void Tx_str(char data) {
+    while (TXSTAbits.TRMT == 0);
+    TXREG = data;
+} //Esta función envia datos cadena
 
-	char signo_y_digitos[12];
-	uint8_t signo = 0;
-	int32_t digito;
-	int8_t indice = 11;
+/****************************************************************************
+ * Nombre de la función: Rx
+ * retorna : Un dato recibido de tipo "Char"
+ * ingresa: nada
+ * Descripción : Recibe un caracter por el puerto USART
+ *****************************************************************************/ 
+char Rx(void) {
+    return RCREG;
+} //Esta función recibe datos
 
-	/* Determinar el signo del número */
-	if(num < 0){
-		signo = 1;
-		num = -num;
-	}
+/****************************************************************************
+ * Nombre de la función: UART0_Tx_String
+ * retorna : nada
+ * ingresa: Una cadena de texto a enviar tipo "Char"
+ * Descripción : La cadena de texto se secciona para enviar cada elemento 
+		como un caracter
+ *****************************************************************************/             
+void UART0_Tx_String(char *str) {
 
-	/* Indicar el fin de la cadena de caracteres */
-	signo_y_digitos[indice--] = '\0';
+    /* Mientras no se alcance el final de la cadena */
+    while (*str != '\0') {
+        /* Transmitir el caracter correspondiente */
+        Tx_str(*str);
+        /* Incrementar el valor del puntero (apuntar al siguiente caracter
+        en el arreglo) */
+        str++;
+    }
+}
 
-	/* Extraer los dígitos uno a uno, empezando por las unidades */
-	do{
-		digito = (num % 10) + '0';
-		signo_y_digitos[indice--] = (char)digito;
-		num /= 10;
-	}while(num);
+/****************************************************************************
+ * Nombre de la función: UART0_Tx_Integer
+ * retorna : nada
+ * ingresa: Un dato a enviar tipo "Int32"
+ * Descripción : El valor entero ingresado se secciona para enviar cada elemento 
+		como un caracter
+ *****************************************************************************/ 
+void UART0_Tx_Integer(int32_t num) {
 
-	/* Agregar el signo (de ser necesario) */
-	if(signo){
-		signo_y_digitos[indice] = '-';
-	}else{
-		indice++;
-	}
+    char signo_y_digitos[12];
+    uint8_t signo = 0;
+    int32_t digito;
+    int8_t indice = 11;
+
+    /* Determinar el signo del número */
+    if (num < 0) {
+        signo = 1;
+        num = -num;
+    }
+
+    /* Indicar el fin de la cadena de caracteres */
+    signo_y_digitos[indice--] = '\0';
+
+    /* Extraer los dígitos uno a uno, empezando por las unidades */
+    do {
+        digito = (num % 10) + '0';
+        signo_y_digitos[indice--] = (char) digito;
+        num /= 10;
+    } while (num);
+
+    /* Agregar el signo (de ser necesario) */
+    if (signo) {
+        signo_y_digitos[indice] = '-';
+    } else {
+        indice++;
+    }
     __delay_ms(100);
-	/* Transmitir el número */
-	UART0_Tx_String(&signo_y_digitos[indice]);
+    /* Transmitir el número */
+    UART0_Tx_String(&signo_y_digitos[indice]);
 }
