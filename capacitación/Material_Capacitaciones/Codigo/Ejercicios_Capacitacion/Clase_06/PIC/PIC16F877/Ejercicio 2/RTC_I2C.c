@@ -7,7 +7,8 @@
  * Nombre de la función: Escribir_Hora_Rtc
  * retorna : nada
  * ingresa: nada
- * Descripción : Envia la hora a una memoria EEPROM
+ * Descripción : Envia la hora al módulo RTC para poder ser guardada e iniciar la cuenta a 
+ * partir de ella 
  *****************************************************************************/
 void Escribir_Hora_Rtc(void) {
     I2C_Inicio();
@@ -33,7 +34,7 @@ void Escribir_Hora_Rtc(void) {
  * Nombre de la función: Leer_Hora_Rtc
  * retorna : nada
  * ingresa: nada
- * Descripción : Recibir informacion de la memoria
+ * Descripción : Recibir informacion de la hora del módulo RTC
  *****************************************************************************/
 void Leer_Hora_Rtc(void) {
     I2C_Inicio(); /*Damos el comando de START para iniciar la transferencia de datos por I2C*/
@@ -54,11 +55,12 @@ void Leer_Hora_Rtc(void) {
 }
 
 /****************************************************************************
- * Nombre de la función: Config_Usart
+ * Nombre de la función: Poner_Fecha_Rtc
  * retorna : nada
  * ingresa: nada
- * Descripción : Configura los registros que intervienen en la comunicacion
-		Usart
+ * Descripción : Permite ingresar la fecha que se desea guardar en el módulo de I2C de
+ * Tiempo real, dicha fecha está contenida en la variable que el usuario puede modificar
+ * Según lo vea conveniente 
  *****************************************************************************/
 void Poner_Fecha_Rtc(void) {
     I2C_Inicio(); /*Enviamos el comando de START del RTC para iniciar la transmisión de los datos*/
@@ -71,11 +73,12 @@ void Poner_Fecha_Rtc(void) {
 }
 
 /****************************************************************************
- * Nombre de la función: Config_Usart
+ * Nombre de la función: Leer_Fecha_Rtc
  * retorna : nada
  * ingresa: nada
- * Descripción : Configura los registros que intervienen en la comunicacion
-		Usart
+ * Descripción : Permite leer la fecha almacenada en el módulo de RTC para poder ser mostrada
+ * Al usar el código en simulaciones y no haber introducido ninguna fecha con anterioridad
+ * El sistema mostrará la fecha del computador
  *****************************************************************************/
 void Leer_Fecha_Rtc(void) {
     I2C_Inicio(); /*Damos el comando de START para iniciar la transferencia de datos por I2C*/
@@ -96,11 +99,10 @@ void Leer_Fecha_Rtc(void) {
 }
 
 /****************************************************************************
- * Nombre de la función: Config_Usart
+ * Nombre de la función: Hora_Por_Terminal_Serial
  * retorna : nada
  * ingresa: nada
- * Descripción : Configura los registros que intervienen en la comunicacion
-		Usart
+ * Descripción : Hace las converciones respectivas para poder enviar la hora por el terminal serial
  *****************************************************************************/
 void Hora_Por_Terminal_Serial(void) {
     Tx_str((horas >> 4) + DATO_CONVERSOR_A_ASCII); /*Mostramos por el ternimal serial la Hora y añadimos el conversor a ASCII*/
@@ -135,11 +137,10 @@ void Hora_Por_Terminal_Serial(void) {
 }
 
 /****************************************************************************
- * Nombre de la función: Config_Usart
+ * Nombre de la función: Fecha_Por_Terminal_Serial
  * retorna : nada
  * ingresa: nada
- * Descripción : Configura los registros que intervienen en la comunicacion
-		Usart
+ * Descripción : Hace las converciones respectivas para poder enviar la hora por el terminal serial
  *****************************************************************************/
 void Fecha_Por_Terminal_Serial(void) {
     Tx_str((years >> 4) + DATO_CONVERSOR_A_ASCII); /*Mostramos por el ternimal serial la Hora y añadimos el conversor a ASCII*/
@@ -174,11 +175,10 @@ void Fecha_Por_Terminal_Serial(void) {
 }
 
 /****************************************************************************
- * Nombre de la función: Config_Usart
+ * Nombre de la función: Transformar_Hora_Para_Envio
  * retorna : nada
  * ingresa: nada
- * Descripción : Configura los registros que intervienen en la comunicacion
-		Usart
+ * Descripción : Permite convertir los datos de la variable de configuración al formato aceptado por el RTC
  *****************************************************************************/
 void Transformar_Hora_Para_Envio(void) {
     for (variable_de_conteo = 0; variable_de_conteo < 7; variable_de_conteo++) { /*Creamos un conteo para garantizar que los bits más significativos sean 0*/
@@ -192,11 +192,10 @@ void Transformar_Hora_Para_Envio(void) {
 }
 
 /****************************************************************************
- * Nombre de la función: Config_Usart
+ * Nombre de la función: Transformar_Fecha_Para_Envio
  * retorna : nada
  * ingresa: nada
- * Descripción : Configura los registros que intervienen en la comunicacion
-		Usart
+ * Descripción : Permite convertir los datos de la variable de configuración al formato aceptado por el RTC
  *****************************************************************************/
 void Transformar_Fecha_Para_Envio(void) {
     for (variable_de_conteo = 0; variable_de_conteo < 7; variable_de_conteo++) {/*Creamos un conteo para garantizar que los bits más significativos sean 0*/
